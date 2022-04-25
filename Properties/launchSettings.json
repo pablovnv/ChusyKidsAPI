@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "kids",
+      "launchUrl": "webhook",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

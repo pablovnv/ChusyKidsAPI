@@ -3,11 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Google.Cloud.Dialogflow.V2;
 using Google.Protobuf;
 using System.IO;
-using System.Text;
 using Newtonsoft.Json;
 using System;
-using ChusyKidsAPI.Model;
 using ChusyKidsAPI.Resources;
+using ChusyKidsAPI.Model;
 
 namespace ChusyKidsAPI.Controllers
 {
@@ -29,30 +28,7 @@ namespace ChusyKidsAPI.Controllers
 
 			ReciveModel data = JsonConvert.DeserializeObject<ReciveModel>(request.QueryResult.ToString());
 
-
-
-
 			var resultResponse = LogicKids(data.parameters.date);
-
-
-
-
-			//var askingName = pas.Fields.ContainsKey("date") && pas.Fields["date"].ToString().Replace('\"', ' ').Trim().Length > 0;
-			//var response = new WebhookResponse();
-
-			//string name = "Jeffson Library", address = "1234 Brentwood Lane, Dallas, TX 12345", businessHour = "8:00 am to 8:00 pm";
-
-			//StringBuilder sb = new StringBuilder();
-
-			//if (askingName)
-			//{
-			//	sb.Append("The name of library is: " + name + "; ");
-			//}
-
-			//if (sb.Length == 0)
-			//{
-			//	sb.Append("Greetings from our Webhook API!");
-			//}
 
 			var response = new WebhookResponse();
 			response.FulfillmentText = resultResponse;
@@ -69,9 +45,9 @@ namespace ChusyKidsAPI.Controllers
 
 			string response;
 			if ((weeks % 2) == 1)
-				response = ResourceResponse.SalDeFiesta;
-			else
 				response = ResourceResponse.SeResponsable;
+			else
+				response = ResourceResponse.SalDeFiesta;
 
 			return response;
 		}
