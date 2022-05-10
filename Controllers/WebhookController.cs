@@ -7,6 +7,9 @@ using Newtonsoft.Json;
 using System;
 using ChusyKidsAPI.Resources;
 using ChusyKidsAPI.Model;
+using static Google.Cloud.Dialogflow.V2.Intent.Types.Message.Types;
+using static Google.Cloud.Dialogflow.V2.Intent.Types.Message.Types.BasicCard.Types;
+using static Google.Cloud.Dialogflow.V2.Intent.Types.Message.Types.BasicCard.Types.Button.Types;
 
 namespace ChusyKidsAPI.Controllers
 {
@@ -30,8 +33,9 @@ namespace ChusyKidsAPI.Controllers
 
 			var resultResponse = LogicKids(data.parameters.date);
 
-			var response = new WebhookResponse();
-			response.FulfillmentText = resultResponse;
+			var response = (new WebhookResponse()).FulfillmentText = resultResponse;
+
+            //response = WebhookWithTarget(resultResponse);
 
 			return Json(response);
 		}
@@ -57,5 +61,51 @@ namespace ChusyKidsAPI.Controllers
 			int diff = (7 + (dateSelected.DayOfWeek - DayOfWeek.Monday)) % 7;
 			return dateSelected.AddDays(-1 * diff).Date;
 		}
-	}
+
+        private WebhookResponse WebhookWithTarget(string fulfillmentText)
+        {
+            return new WebhookResponse
+            {
+                FulfillmentText = fulfillmentText,
+                FulfillmentMessages =
+                {
+                    new Google.Cloud.Dialogflow.V2.Intent.Types.Message
+                    {
+                        SimpleResponses = new SimpleResponses
+                        { SimpleResponses_ =
+                            {
+                                new SimpleResponse
+                                {
+                                    DisplayText = "Text Simple Response",
+                                    TextToSpeech = "The speech",
+                                    Ssml = "<speak>The speech</speak>"
+                                }
+                            }
+                        }
+                    },
+                    new Google.Cloud.Dialogflow.V2.Intent.Types.Message
+                    {
+                        BasicCard = new BasicCard
+                        {
+                            Title = "TITULO DE LA TARJETA",
+                            Subtitle = "Subtitulo de la tarjeta",
+                            FormattedText = "Esto es la descripción de la tarjeta, estoy rellenandolo a ver que pasa",
+                            Buttons =
+                            {
+                                new Button
+                                {
+                                    Title = "TITULO DEL BOTOÓN",
+                                    OpenUriAction = new OpenUriAction
+                                    {
+                                        Uri = "https://web.telegram.org/k/"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
+    }
 }
