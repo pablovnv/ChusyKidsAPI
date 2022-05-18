@@ -33,7 +33,9 @@ namespace ChusyKidsAPI.Controllers
 
 			var resultResponse = LogicKids(data.parameters.date);
 
-			var response = (new WebhookResponse()).FulfillmentText = resultResponse;
+            var response = new WebhookResponse();
+
+            response.FulfillmentText = resultResponse;
 
             //response = WebhookWithTarget(resultResponse);
 
